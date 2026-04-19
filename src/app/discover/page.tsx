@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import { Badge, Button, Card, Container, cn } from "@/components/ui";
 import { AmbientBackground } from "@/features/home/components/Background";
-import { Footer } from "@/features/home/components/Footer";
-import { Header } from "@/features/home/components/Header";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "Discover — Vaultune",

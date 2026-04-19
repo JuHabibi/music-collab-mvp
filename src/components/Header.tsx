@@ -2,9 +2,9 @@ import { Button, Container, cn } from "@/components/ui";
 
 const links = [
   { label: "Discover", href: "/discover" },
-  { label: "How it works", href: "#how" },
-  { label: "Collaborate", href: "#collaborate" },
-  { label: "Sign in", href: "#signin" }
+  { label: "How it works", href: "/#how" },
+  { label: "Collaborate", href: "/#collaborate" },
+  { label: "Sign in", href: "/login" }
 ];
 
 export function Header() {
@@ -13,7 +13,7 @@ export function Header() {
       <Container className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
           <a
-            href="#top"
+            href="/"
             className={cn(
               "font-[var(--font-display)] text-lg tracking-tight",
               "text-white"
@@ -38,12 +38,12 @@ export function Header() {
           <Button
             variant="ghost"
             size="sm"
-            href="#signin"
+            href="/login"
             className="hidden sm:inline-flex"
           >
             Sign in
           </Button>
-          <Button href="#join" size="sm">
+          <Button href="/signup" size="sm">
             Join now
           </Button>
         </div>
@@ -51,4 +51,3 @@ export function Header() {
     </header>
   );
 }
-

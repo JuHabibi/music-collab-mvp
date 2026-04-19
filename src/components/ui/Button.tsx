@@ -7,13 +7,17 @@ export function Button({
   className,
   variant = "primary",
   size = "md",
-  href
+  href,
+  type,
+  disabled
 }: {
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md";
   href?: string;
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  disabled?: boolean;
 }) {
   const base =
     "inline-flex items-center justify-center gap-2 rounded-full font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-white/20 active:translate-y-[1px]";
@@ -29,13 +33,21 @@ export function Button({
     ghost: "text-white/75 hover:text-white hover:bg-white/[0.04]"
   } as const;
 
-  const Comp: any = href ? "a" : "button";
+  if (href) {
+    return (
+      <a href={href} className={cn(base, sizes[size], variants[variant], className)}>
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <Comp
-      href={href}
+    <button
+      type={type ?? "button"}
       className={cn(base, sizes[size], variants[variant], className)}
+      disabled={disabled}
     >
       {children}
-    </Comp>
+    </button>
   );
 }
