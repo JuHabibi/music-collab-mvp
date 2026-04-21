@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Badge, Button, Card, Container, cn } from "@/components/ui";
 import { AmbientBackground } from "@/features/home/components/Background";
 import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { ServerHeader } from "@/components/ServerHeader";
 
 export const metadata: Metadata = {
   title: "Discover — Vaultune",
@@ -174,7 +174,7 @@ export default function DiscoverPage() {
   return (
     <main className="relative">
       <AmbientBackground />
-      <Header />
+      <ServerHeader />
 
       <section className="relative overflow-hidden border-b border-white/5">
         <div

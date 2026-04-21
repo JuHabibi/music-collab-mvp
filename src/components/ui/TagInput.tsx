@@ -2,31 +2,40 @@
 
 import * as React from "react";
 
-import { Badge } from "./Badge";
 import { cn } from "../../lib/cn";
+import { Badge } from "./Badge";
 import { Input } from "./Input";
+
+type TagInputProps = {
+  id?: string;
+  value: string[];
+  onChange: (next: string[]) => void;
+  placeholder?: string;
+  className?: string;
+};
 
 export function TagInput({
   id,
+  value,
+  onChange,
   placeholder = "Type and press Enter…",
-  className
-}: {
-  id?: string;
-  placeholder?: string;
-  className?: string;
-}) {
-  const [tags, setTags] = React.useState<string[]>([]);
+  className,
+}: TagInputProps) {
   const [draft, setDraft] = React.useState("");
 
   function addFromDraft() {
-    const t = draft.trim();
-    if (!t) return;
-    setTags((prev) => (prev.includes(t) ? prev : [...prev, t]));
+    const nextTag = draft.trim();
+    if (!nextTag) return;
+
+    if (!value.includes(nextTag)) {
+      onChange([...value, nextTag]);
+    }
+
     setDraft("");
   }
 
   function remove(tag: string) {
-    setTags((prev) => prev.filter((x) => x !== tag));
+    onChange(value.filter((x) => x !== tag));
   }
 
   return (
@@ -44,17 +53,18 @@ export function TagInput({
         placeholder={placeholder}
         autoComplete="off"
       />
-      {tags.length > 0 ? (
+
+      {value.length > 0 ? (
         <div className="flex flex-wrap gap-2">
-          {tags.map((t) => (
+          {value.map((tag) => (
             <button
-              key={t}
+              key={tag}
               type="button"
-              onClick={() => remove(t)}
+              onClick={() => remove(tag)}
               className="group"
             >
               <Badge className="cursor-pointer bg-white/[0.04] pr-2 text-white/80 transition hover:bg-white/[0.07]">
-                {t}
+                {tag}
                 <span
                   className="ml-1.5 inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] text-white/45 group-hover:text-white/70"
                   aria-hidden
