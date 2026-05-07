@@ -1,5 +1,6 @@
 import { IconSearch } from "./Icons";
 import { Button, Container, cn } from "@/components/ui";
+import { homeH2GradientClass } from "@/features/home/homeHeading";
 
 const bullets = [
   "Stop guessing who might be a fit see shared taste, goals, and momentum up front",
@@ -103,12 +104,12 @@ export function RealSessions() {
               )}
             >
               <span className="text-white">Less scrolling.</span>{" "}
-              <span className="bg-gradient-to-r from-violet-200 via-white to-cyan-200 bg-clip-text text-transparent">
+              <span className={homeH2GradientClass}>
                 More sessions that spark something real.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/78">
+            <p className="text-paper-muted mt-5 max-w-xl text-[15px] leading-relaxed">
               Find the right people, swap demos, and turn rough ideas into
               tracks that actually deserve to be finished.
             </p>
@@ -117,11 +118,11 @@ export function RealSessions() {
               {bullets.map((b) => (
                 <div
                   key={b}
-                  className="group flex items-start gap-3 rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-3.5 transition-all duration-200 hover:border-white/14 hover:bg-white/[0.035]"
+                  className="group flex items-start gap-3 rounded-2xl border border-white/[0.13] bg-white/[0.055] px-4 py-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] transition-all duration-200 hover:border-white/[0.17] hover:bg-white/[0.075]"
                 >
                   <div className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-br from-violet-300 to-cyan-300 shadow-[0_0_18px_rgba(103,232,249,0.18)]" />
 
-                  <p className="text-sm leading-relaxed text-white/80">
+                  <p className="text-paper-muted text-sm leading-relaxed">
                     {b}
                   </p>
                 </div>
@@ -137,7 +138,7 @@ export function RealSessions() {
                 <IconSearch className="h-4 w-4" />
               </Button>
 
-              <p className="text-sm text-white/48">
+              <p className="text-sm text-paper-subtle">
                 Built for sessions that actually go somewhere.
               </p>
             </div>

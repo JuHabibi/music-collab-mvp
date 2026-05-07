@@ -6,6 +6,19 @@
   color-scheme: dark;
 }
 
+/* Home “paper white”: warmer body copy on dark UI (use with dark backgrounds). */
+@layer utilities {
+  .text-paper {
+    color: rgba(250, 250, 249, 0.92);
+  }
+  .text-paper-muted {
+    color: rgba(245, 245, 244, 0.78);
+  }
+  .text-paper-subtle {
+    color: rgba(231, 229, 228, 0.62);
+  }
+}
+
 html,
 body {
   height: 100%;

@@ -1,5 +1,6 @@
 import { IconArrowRight, IconMessage, IconPin } from "./Icons";
 import { Badge, Button, Card, Container } from "@/components/ui";
+import { homeH2GradientClass } from "@/features/home/homeHeading";
 
 type CollabPost = {
   title: string;
@@ -58,13 +59,14 @@ export function CollabExamples() {
       <Container>
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <div className="text-xs font-medium tracking-wide text-white/55">
+            <div className="text-xs font-medium tracking-wide text-paper-subtle">
               Featured collaboration examples
             </div>
             <h2 className="mt-2 font-[var(--font-display)] text-3xl tracking-tight text-white sm:text-4xl">
-              Real briefs. Real sessions.
+              <span className="text-white">Real briefs.</span>{" "}
+              <span className={homeH2GradientClass}>Real sessions.</span>
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/65">
+            <p className="text-paper-muted mt-4 max-w-xl text-sm leading-relaxed">
               A good collaboration starts with clarity: vibe, role, and what
               “done” looks like. Enough detail to feel the groove before you DM.
             </p>
@@ -77,7 +79,7 @@ export function CollabExamples() {
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {posts.map((p) => (
-            <Card key={p.title} className="relative flex h-full flex-col overflow-hidden p-6">
+            <Card key={p.title} className="relative flex h-full flex-col overflow-hidden border-white/[0.13] bg-white/[0.055] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-[radial-gradient(420px_140px_at_30%_10%,rgba(255,255,255,0.07),transparent_60%),linear-gradient(to_bottom,rgba(255,255,255,0.03),transparent)]"
@@ -87,40 +89,40 @@ export function CollabExamples() {
                   {p.title}
                 </div>
               </div>
-              <div className="mt-3 text-xs text-white/60">{p.by}</div>
-              <div className="mt-2 inline-flex items-center gap-1 text-xs text-white/55">
+              <div className="mt-3 text-xs text-paper-subtle">{p.by}</div>
+              <div className="mt-2 inline-flex items-center gap-1 text-xs text-paper-subtle">
                 <IconPin className="h-4 w-4" />
                 {p.location}
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {p.tags.map((t) => (
-                  <Badge key={t} className="bg-white/[0.02]">
+                  <Badge key={t} className="border-white/[0.12] bg-white/[0.05]">
                     {t}
                   </Badge>
                 ))}
               </div>
 
-              <div className="mt-5 grid gap-3 rounded-2xl border border-white/10 bg-black/15 p-4">
+              <div className="mt-5 grid gap-3 rounded-2xl border border-white/[0.12] bg-black/20 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
                 <div className="flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-[11px] text-white/55">Looking for</div>
-                    <div className="mt-0.5 text-xs font-medium text-white/80">
+                    <div className="text-[11px] text-paper-subtle">Looking for</div>
+                    <div className="text-paper-muted mt-0.5 text-xs font-medium">
                       {p.lookingFor}
                     </div>
                   </div>
-                  <div className="rounded-full border border-white/10 bg-white/[0.03] px-2 py-1 text-[11px] text-white/70">
+                  <div className="rounded-full border border-white/[0.12] bg-white/[0.05] px-2 py-1 text-[11px] text-paper-muted">
                     {p.when}
                   </div>
                 </div>
-                <div className="text-[11px] text-white/55">
-                  Vibe: <span className="text-white/75">{p.vibe}</span>
+                <div className="text-[11px] text-paper-subtle">
+                  Vibe: <span className="text-paper-muted">{p.vibe}</span>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {p.deliverables.map((d) => (
                     <span
                       key={d}
-                      className="rounded-full border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] text-white/70"
+                      className="rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[11px] text-paper-muted"
                     >
                       {d}
                     </span>
@@ -128,10 +130,10 @@ export function CollabExamples() {
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-relaxed text-white/65">{p.detail}</p>
+              <p className="text-paper-muted mt-4 text-sm leading-relaxed">{p.detail}</p>
 
               <div className="mt-6 flex items-center justify-between">
-                <div className="text-xs text-white/45">Typical reply: ~2h</div>
+                <div className="text-xs text-paper-subtle">Typical reply: ~2h</div>
                 <Button variant="secondary" size="sm" href="#join" className="h-9 px-3">
                   Start the thread
                   <IconMessage className="h-4 w-4" />

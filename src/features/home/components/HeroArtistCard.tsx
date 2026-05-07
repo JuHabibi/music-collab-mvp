@@ -71,7 +71,7 @@ function MatchRing({ pct }: { pct: number }) {
 
      export function HeroArtistCard({ profile }: { profile: ArtistProfile }) {
     return (
-      <Card className={cn("relative overflow-hidden", "p-7")}>
+      <Card className={cn("relative overflow-hidden backdrop-blur-0", "p-7")}>
         <div
           className={cn(
             "pointer-events-none absolute inset-0 bg-gradient-to-br",
@@ -83,7 +83,7 @@ function MatchRing({ pct }: { pct: number }) {
           <div className="flex items-start gap-4">
             <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-white/10 shadow-[0_18px_70px_rgba(0,0,0,0.55)]">
               <div className={cn("absolute inset-0", coverAccents[profile.accent])} />
-              <div className="absolute inset-0 backdrop-blur-[2px]" />
+              <div className="absolute inset-0 bg-black/10" />
               <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold text-white/90">
                 {profile.name
                   .split(" ")
@@ -95,8 +95,8 @@ function MatchRing({ pct }: { pct: number }) {
   
             <div>
               <div className="text-base font-semibold text-white">{profile.name}</div>
-              <div className="mt-1 text-sm text-white/70">{profile.role}</div>
-              <div className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/10 bg-black/25 px-2.5 py-1 text-[11px] text-white/70">
+              <div className="mt-1 text-sm text-paper-muted">{profile.role}</div>
+              <div className="mt-3 inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-black/30 px-2.5 py-1 text-[11px] text-paper-muted">
                 <IconPin className="h-3.5 w-3.5" />
                 {profile.location}
               </div>
@@ -104,35 +104,35 @@ function MatchRing({ pct }: { pct: number }) {
           </div>
   
           <div className="flex flex-col items-end gap-2">
-            <div className="text-[11px] text-white/55">Creative match</div>
+            <div className="text-[11px] text-paper-subtle">Creative match</div>
             <MatchRing pct={profile.matchPct} />
           </div>
         </div>
   
         <div className="relative mt-7 grid gap-4">
-          <div className="rounded-2xl border border-white/10 bg-black/15 p-4">
-            <div className="text-[11px] text-white/55">Shared influences</div>
-            <div className="mt-2 text-sm text-white/80">
-              <span className="text-white">{profile.influences[0]}</span>
-              <span className="text-white/45"> · </span>
-              <span className="text-white">{profile.influences[1]}</span>
+          <div className="rounded-2xl border border-white/[0.12] bg-black/22 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+            <div className="text-[11px] text-paper-subtle">Shared influences</div>
+            <div className="mt-2 text-sm">
+              <span className="text-paper">{profile.influences[0]}</span>
+              <span className="text-paper-subtle"> · </span>
+              <span className="text-paper">{profile.influences[1]}</span>
             </div>
           </div>
   
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-              <div className="text-[11px] text-white/55">Vibe</div>
-              <div className="mt-2 text-sm text-white/80">{profile.vibe}</div>
+            <div className="rounded-2xl border border-white/[0.13] bg-white/[0.055] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              <div className="text-[11px] text-paper-subtle">Vibe</div>
+              <div className="text-paper-muted mt-2 text-sm">{profile.vibe}</div>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-              <div className="text-[11px] text-white/55">Goals</div>
-              <div className="mt-2 text-sm text-white/80">{profile.goal}</div>
+            <div className="rounded-2xl border border-white/[0.13] bg-white/[0.055] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              <div className="text-[11px] text-paper-subtle">Goals</div>
+              <div className="text-paper-muted mt-2 text-sm">{profile.goal}</div>
             </div>
           </div>
         </div>
   
         <div className="relative mt-6 flex items-center justify-between gap-4">
-          <div className="text-sm text-white/70">{profile.availability}</div>
+          <div className="text-sm text-paper-muted">{profile.availability}</div>
           <Button variant="secondary" href="#join" className="h-10 px-4 text-sm">
             View profile
             <IconArrowRight className="h-4 w-4" />

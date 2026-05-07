@@ -1,5 +1,6 @@
 import { IconArrowRight, IconMessage, IconSearch, IconSpark } from "./Icons";
 import { Card, Container, cn } from "@/components/ui";
+import { homeH2GradientClass } from "@/features/home/homeHeading";
 
 const steps = [
   {
@@ -34,17 +35,17 @@ export function HowItWorks() {
 
             <h2 className="mt-3 font-[var(--font-display)] text-3xl tracking-tight text-white sm:text-4xl lg:text-[48px] lg:leading-[1.02]">
               <span className="text-white">From profile to real sessions.</span>{" "}
-              <span className="bg-gradient-to-r from-violet-200 via-white to-cyan-200 bg-clip-text text-transparent">
+              <span className={homeH2GradientClass}>
                 Clear, focused, and built for momentum.
               </span>
             </h2>
 
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/68 sm:text-[15px]">
+            <p className="text-paper-muted mt-4 max-w-xl text-sm leading-relaxed sm:text-[15px]">
             Vaultune helps artists find the right fit faster and move from discovery to real collaboration without the usual noise.
             </p>
           </div>
 
-          <div className="hidden items-center gap-2 text-sm text-white/50 md:flex">
+          <div className="hidden items-center gap-2 text-sm text-paper-subtle md:flex">
             <span>Profile</span>
             <IconArrowRight className="h-4 w-4" />
             <span>Discovery</span>
@@ -58,8 +59,8 @@ export function HowItWorks() {
             <Card
               key={s.title}
               className={cn(
-                "group relative overflow-hidden border-white/10 bg-white/[0.02] p-6 transition-all duration-200",
-                "hover:border-white/15 hover:bg-white/[0.03]"
+                "group relative overflow-hidden border-white/[0.13] bg-white/[0.055] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200",
+                "hover:border-white/[0.17] hover:bg-white/[0.075]"
               )}
             >
               <div
@@ -70,15 +71,15 @@ export function HowItWorks() {
               </div>
 
               <div className="relative z-10 flex items-center justify-between">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
+                <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.06]">
                   <s.icon className="h-6 w-6 text-white/80" />
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="hidden rounded-full border border-white/10 bg-white/[0.02] px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-white/40 sm:inline-flex">
+                  <span className="hidden rounded-full border border-white/[0.12] bg-white/[0.05] px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-paper-subtle sm:inline-flex">
                     {s.label}
                   </span>
-                  <div className="text-xs text-white/35">0{idx + 1}</div>
+                  <div className="text-xs text-paper-subtle">0{idx + 1}</div>
                 </div>
               </div>
 
@@ -86,7 +87,7 @@ export function HowItWorks() {
                 {s.title}
               </div>
 
-              <p className="relative z-10 mt-2 text-sm leading-relaxed text-white/65">
+              <p className="text-paper-muted relative z-10 mt-2 text-sm leading-relaxed">
                 {s.desc}
               </p>
             </Card>

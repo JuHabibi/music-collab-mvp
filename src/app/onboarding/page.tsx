@@ -18,14 +18,19 @@ export default async function OnboardingPage() {
   if (!user) {
     redirect("/login");
   }
-  const { data: profile } = await supabase
+  const { error, data: profile } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user.id)
-    .single();
+    .maybeSingle();
+
+  if (error) {
+   throw error;
+  }
 
   if (profile?.publish_status === "published") {
-    redirect("/discover");
+    const slug = profile.display_name.trim().toLowerCase().replace(/\s+/g, "-");
+    redirect(`/artist/${slug}`);
   }
-  return <OnboardingScreen initialIsAuthed={true} />;
+  return <OnboardingScreen initialProfile={profile} initialIsAuthed={true} mode="onboarding" />;
 }

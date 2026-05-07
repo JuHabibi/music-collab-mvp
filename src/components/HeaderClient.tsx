@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Container, cn } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { supabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -16,7 +16,7 @@ export function HeaderClient({ initialIsAuthed }: HeaderClientProps) {
   const [isAuthed, setIsAuthed] = useState(initialIsAuthed);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabaseClient.auth.onAuthStateChange((_event, session) => {
       setIsAuthed(Boolean(session?.user));
       setLoadingAuth(false);
     });
@@ -38,7 +38,7 @@ export function HeaderClient({ initialIsAuthed }: HeaderClientProps) {
 
   async function onSignOut() {
     setLoadingAuth(true);
-    await supabase.auth.signOut();
+    await supabaseClient.auth.signOut();
     router.refresh();
     router.push("/");
   }

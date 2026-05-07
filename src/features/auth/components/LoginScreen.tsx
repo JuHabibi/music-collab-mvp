@@ -1,10 +1,12 @@
+
 "use client";
 
 import { Button, Card, Container, Input, Label } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { supabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -14,6 +16,7 @@ const formSchema = z.object({
 });
 
 export function LoginScreen() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,18 +35,45 @@ export function LoginScreen() {
 
   const onSubmit = async (formData: z.infer<typeof formSchema>) => {
     const { email, password } = formData;
+  
     setAuthError(null);
     setAuthSuccess(null);
-
-    const { error } = await supabase.auth.signInWithPassword({
+  
+    const { error: signInError } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
-    if (error) {
-      setAuthError(error.message);
+  
+    if (signInError) {
+      setAuthError(signInError.message);
       return;
     }
+  
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseClient.auth.getUser();
+  
+    if (userError || !user) {
+      setAuthError("Your session has expired. Please sign in again.");
+      return;
+    }
+  
+    const { data: profile, error: profileError } = await supabaseClient
+      .from("profiles")
+      .select("publish_status")
+      .eq("id", user.id)
+      .maybeSingle();
+  
+    if (profileError) {
+      setAuthError(profileError.message);
+      return;
+    }
+  
     setAuthSuccess("Welcome back.");
+  
+    router.push(profile?.publish_status === "published" ? "/artist/me" : "/onboarding");
+    router.refresh();
   };
 
   return (

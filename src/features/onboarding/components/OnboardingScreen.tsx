@@ -16,7 +16,9 @@ import {
   Textarea,
   cn,
 } from "@/components/ui";
+import { supabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
@@ -31,6 +33,7 @@ const checkboxClass =
   "h-4 w-4 shrink-0 rounded border-white/20 bg-white/[0.03] text-violet-300 accent-violet-300 focus:ring-2 focus:ring-white/20";
 
 type ProfilePayload = {
+  id: string;
   display_name: string;
   primary_role: string;
   genres: string[];
@@ -42,6 +45,12 @@ type ProfilePayload = {
   influences: string[];
   portfolio_links: string[];
   publish_status: "draft" | "published";
+};
+
+type OnboardingScreenProps = {
+  initialIsAuthed: boolean;
+  initialProfile: ProfilePayload | null;
+  mode?: "onboarding" | "edit";
 };
 
 function socialUrlField({
@@ -103,25 +112,42 @@ const formSchema = z.object({
   }),
 });
 
-export function OnboardingScreen({ initialIsAuthed }: { initialIsAuthed: boolean }) {
-  const [publishBlockingErrors, setPublishBlockingErrors] = useState<string[]>(
-    [],
-  );
+export function OnboardingScreen({
+  initialIsAuthed,
+  initialProfile,
+  mode = "onboarding",
+}: OnboardingScreenProps) {
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [publishBlockingErrors, setPublishBlockingErrors] = useState<string[]>([]);
+  const router = useRouter();
+  const [isPublishing, setIsPublishing] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      displayName: "",
-      primaryRole: "",
-      genres: [],
-      lookingFor: [],
-      availability: "",
-      collaborationMode: "",
-      city: "",
-      bio: "",
-      influences: [],
-      soundcloud: "",
-      spotify: "",
-      youtube: "",
+      displayName: initialProfile?.display_name ?? "",
+      primaryRole: initialProfile?.primary_role ?? "",
+      genres: initialProfile?.genres ?? [],
+      lookingFor: initialProfile?.looking_for ?? [],
+      availability: initialProfile?.availability ?? "",
+      collaborationMode: initialProfile?.collaboration_mode ?? "",
+      city: initialProfile?.city ?? "",
+      bio: initialProfile?.bio ?? "",
+      influences: initialProfile?.influences ?? [],
+      soundcloud:
+        initialProfile?.portfolio_links?.find((link) =>
+          link.includes("soundcloud.com")
+        ) ?? "",
+      spotify:
+        initialProfile?.portfolio_links?.find((link) =>
+          link.includes("spotify.com")
+        ) ?? "",
+      youtube:
+        initialProfile?.portfolio_links?.find(
+          (link) =>
+            link.includes("youtube.com") || link.includes("youtu.be")
+        ) ?? "",
     },
   });
 
@@ -268,13 +294,25 @@ export function OnboardingScreen({ initialIsAuthed }: { initialIsAuthed: boolean
     };
   };
 
-  const onSubmit = (
+  const onSubmit = async (
     data: z.infer<typeof formSchema>,
     e?: React.BaseSyntheticEvent,
   ) => {
+    const {
+      data: { user },
+    } = await supabaseClient.auth.getUser();
+  
+    setSaveMessage(null);
+    setSaveError(null);
+  
+    if (!user) {
+      setSaveError("Your session has expired. Please sign in again.");
+      return;
+    }
+  
     const intent = getSubmitIntent(e);
     setPublishBlockingErrors([]);
-
+  
     if (intent === "published") {
       const result = validateForPublish(data);
       if (!result.ok) {
@@ -285,17 +323,36 @@ export function OnboardingScreen({ initialIsAuthed }: { initialIsAuthed: boolean
         return;
       }
     }
-
+  
     const transformData = mapFormToSaveDraftPayload(data);
+  
     const payload: ProfilePayload = {
+      id: user.id,
       ...transformData,
       genres: data.genres,
       looking_for: data.lookingFor,
       collaboration_mode: data.collaborationMode,
       publish_status: intent,
     };
-
-    console.log("data", payload);
+  
+    const { error } = await supabaseClient
+      .from("profiles")
+      .upsert(payload, { onConflict: "id" });
+  
+    if (error) {
+      setSaveError("We couldn’t save your profile.");
+      return;
+    }
+  
+    if (intent === "published") {
+      setSaveMessage("Profile published.");
+      router.push(
+        `/artist/${payload.display_name.toLowerCase().replace(/ /g, "-")}`
+      );
+      router.refresh();
+      return;
+    }
+    setSaveMessage("Draft saved.");
   };
 
   return (
@@ -726,6 +783,9 @@ export function OnboardingScreen({ initialIsAuthed }: { initialIsAuthed: boolean
                     </Button>
                   </div>
                 </div>
+                {saveMessage && <p className="text-xs text-green-300">{saveMessage}</p>}
+                {saveError && <p className="text-xs text-red-300">{saveError}</p>}  
+                {isPublishing && <p className="text-xs text-yellow-300">Publishing...</p>}
               </div>
             </Card>
           </form>

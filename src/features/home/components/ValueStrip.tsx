@@ -6,7 +6,7 @@ export function ValueStrip() {
   return (
     <section className="border-y border-white/5 bg-ink-900/20">
       <Container className="flex flex-col items-start justify-between gap-4 py-8 md:flex-row md:items-center">
-        <div className="text-sm text-white/70">
+        <div className="text-sm text-paper-muted">
           Built for sessions and release‑ready work — fewer “🔥🔥🔥”, more real
           direction.
         </div>

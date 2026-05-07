@@ -1,5 +1,6 @@
 import { IconMessage, IconPin, IconSearch, IconSpark } from "./Icons";
 import { Card, Container, cn } from "@/components/ui";
+import { homeH2GradientClass } from "@/features/home/homeHeading";
 
 const features = [
   {
@@ -41,12 +42,12 @@ export function Features() {
 
             <h2 className="mt-3 font-[var(--font-display)] text-3xl tracking-tight text-white sm:text-4xl lg:text-[48px] lg:leading-[1.02]">
               <span className="text-white">Less hunting.</span>{" "}
-              <span className="bg-gradient-to-r from-violet-200 via-white to-cyan-200 bg-clip-text text-transparent">
+              <span className={homeH2GradientClass}>
                 More making.
               </span>
             </h2>
 
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/68 sm:text-[15px]">
+            <p className="text-paper-muted mt-5 max-w-md text-sm leading-relaxed sm:text-[15px]">
               Vaultune is tuned for creator culture: clear intent, fast chemistry,
               cleaner handoffs, and fewer dead-end conversations.
             </p>
@@ -59,8 +60,8 @@ export function Features() {
                 <Card
                   key={f.title}
                   className={cn(
-                    "group relative overflow-hidden border-white/10 bg-white/[0.02] p-6 transition-all duration-200",
-                    "hover:border-white/15 hover:bg-white/[0.03]",
+                    "group relative overflow-hidden border-white/[0.13] bg-white/[0.055] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-all duration-200",
+                    "hover:border-white/[0.17] hover:bg-white/[0.075]",
                     i === 1 && "sm:-translate-y-2"
                   )}
                 >
@@ -78,7 +79,7 @@ export function Features() {
                     )}
                   />
 
-                  <div className="relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03]">
+                  <div className="relative z-10 inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.12] bg-white/[0.06]">
                     <f.icon className="h-6 w-6 text-white/80" />
                   </div>
 
@@ -86,7 +87,7 @@ export function Features() {
                     {f.title}
                   </div>
 
-                  <p className="relative z-10 mt-2 text-sm leading-relaxed text-white/65">
+                  <p className="text-paper-muted relative z-10 mt-2 text-sm leading-relaxed">
                     {f.desc}
                   </p>
                 </Card>

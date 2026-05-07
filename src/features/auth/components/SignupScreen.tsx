@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card, Container, Input, Label } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { supabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export function SignupScreen() {
     setAuthError(null);
     setAuthSuccess(null);
 
-    const signup = await supabase.auth.signUp({
+    const signup = await supabaseClient.auth.signUp({
       email,
       password,
     });
