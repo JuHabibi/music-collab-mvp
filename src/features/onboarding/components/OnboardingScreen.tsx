@@ -334,7 +334,8 @@ export function OnboardingScreen({
       collaboration_mode: data.collaborationMode,
       publish_status: intent,
     };
-  
+    console.log("influences form", data.influences);
+    console.log("payload influences", payload.influences);
     const { error } = await supabaseClient
       .from("profiles")
       .upsert(payload, { onConflict: "id" });
@@ -377,10 +378,10 @@ export function OnboardingScreen({
               Onboarding
             </div>
             <h1 className="mt-3 font-[var(--font-display)] text-4xl tracking-tight text-white sm:text-5xl">
-              Build your profile
+             {mode === "onboarding" ? "Build your profile" : "Edit your profile"}
             </h1>
             <p className="mt-4 text-base leading-relaxed text-white/70 sm:text-[17px]">
-              Better profiles create better matches.
+             {mode === "onboarding" ? "Better profiles create better matches." : "Edit your profile to get better collaboration matches."}
             </p>
             <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <Badge className="w-fit bg-white/[0.04] text-white/80">

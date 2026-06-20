@@ -27,26 +27,15 @@ function formatAvailability(value: string) {
   return value || "Availability not set";
 }
 
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+export default async function ArtistProfilePage({ params }: { params: Promise<{ id: string }> }) {
 
-export default async function ArtistMePage() {
+  const { id } = await params;
   const supabase = await supabaseServer();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/login");
-  }
 
   const { data: profile, error } = await supabase
     .from("profiles")
@@ -66,16 +55,19 @@ export default async function ArtistMePage() {
       publish_status
     `,
     )
-    .eq("id", user.id)
+    .eq("id", id)
+    .eq("publish_status", "published")
     .maybeSingle();
 
   if (error) {
     throw error;
   }
 
-  if (!profile || profile.publish_status !== "published") {
-    redirect("/onboarding");
+  if (!profile) {
+    return <div className="p-8 text-white/60">Profile not found.</div>;
   }
+
+  const isOwner = user?.id === profile.id;
 
 
   return (
@@ -254,9 +246,12 @@ export default async function ArtistMePage() {
                 <Button href="/discover" className="sm:w-auto">
                   Go to Discover
                 </Button>
-                <Button href="/onboarding" variant="secondary" className="sm:w-auto">
-                  Edit profile
-                </Button>
+                {isOwner ? (
+  <Button href="/profile/edit"  variant="secondary" className="sm:w-auto">
+    Edit profile
+  </Button>
+) : null}
+               
               </div>
             </div>
           </Card>

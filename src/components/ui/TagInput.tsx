@@ -50,6 +50,7 @@ export function TagInput({
             addFromDraft();
           }
         }}
+        onBlur={() => addFromDraft()}
         placeholder={placeholder}
         autoComplete="off"
       />
