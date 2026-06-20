@@ -2,6 +2,7 @@
 "use client";
 
 import { Button, Card, Container, Input, Label } from "@/components/ui";
+import { getOwnProfile } from "@/features/profiles/profileRepository";
 import { supabaseClient } from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
@@ -59,14 +60,13 @@ export function LoginScreen() {
       return;
     }
   
-    const { data: profile, error: profileError } = await supabaseClient
-      .from("profiles")
-      .select("publish_status")
-      .eq("id", user.id)
-      .maybeSingle();
-  
-    if (profileError) {
-      setAuthError(profileError.message);
+    let profile;
+    try {
+      profile = await getOwnProfile(supabaseClient, user.id);
+    } catch (error) {
+      setAuthError(
+        error instanceof Error ? error.message : "Could not load your profile.",
+      );
       return;
     }
   

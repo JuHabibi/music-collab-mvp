@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 
-import { DiscoverScreen } from "@/features/discover/components/DiscoverScreen";
-import { supabaseServer } from "@/lib/supabase/server";
 import { Container } from "@/components/ui";
+import { DiscoverScreen } from "@/features/discover/components/DiscoverScreen";
+import { getPublishedProfiles } from "@/features/profiles/profileRepository";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Discover — Vaultune",
@@ -12,14 +13,7 @@ export const metadata: Metadata = {
 
 export default async function DiscoverPage() {
   const supabase = await supabaseServer();
-  const { data: profiles, error } = await supabase
-  .from("profiles")
-  .select("*")
-  .eq("publish_status", "published");
-
-  if (error) {
-    throw error;
-  }
+  const profiles = await getPublishedProfiles(supabase);
 
   if (!profiles || profiles.length === 0) {
     return (

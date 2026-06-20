@@ -17,6 +17,12 @@ import {
   cn,
 } from "@/components/ui";
 import { supabaseClient } from "@/lib/supabase/client";
+import { saveProfile } from "@/features/profiles/profileRepository";
+import {
+  parseCollaborationMode,
+  type Profile,
+  type SaveProfilePayload,
+} from "@/features/profiles/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,24 +38,9 @@ const radioClass =
 const checkboxClass =
   "h-4 w-4 shrink-0 rounded border-white/20 bg-white/[0.03] text-violet-300 accent-violet-300 focus:ring-2 focus:ring-white/20";
 
-type ProfilePayload = {
-  id: string;
-  display_name: string;
-  primary_role: string;
-  genres: string[];
-  looking_for: string[];
-  availability: string;
-  collaboration_mode: "remote" | "local" | "both" | "";
-  city: string | null;
-  bio: string | null;
-  influences: string[];
-  portfolio_links: string[];
-  publish_status: "draft" | "published";
-};
-
 type OnboardingScreenProps = {
   initialIsAuthed: boolean;
-  initialProfile: ProfilePayload | null;
+  initialProfile: Profile | null;
   mode?: "onboarding" | "edit";
 };
 
@@ -131,7 +122,9 @@ export function OnboardingScreen({
       genres: initialProfile?.genres ?? [],
       lookingFor: initialProfile?.looking_for ?? [],
       availability: initialProfile?.availability ?? "",
-      collaborationMode: initialProfile?.collaboration_mode ?? "",
+      collaborationMode: parseCollaborationMode(
+        initialProfile?.collaboration_mode,
+      ),
       city: initialProfile?.city ?? "",
       bio: initialProfile?.bio ?? "",
       influences: initialProfile?.influences ?? [],
@@ -326,7 +319,7 @@ export function OnboardingScreen({
   
     const transformData = mapFormToSaveDraftPayload(data);
   
-    const payload: ProfilePayload = {
+    const payload: SaveProfilePayload = {
       id: user.id,
       ...transformData,
       genres: data.genres,
@@ -336,11 +329,10 @@ export function OnboardingScreen({
     };
     console.log("influences form", data.influences);
     console.log("payload influences", payload.influences);
-    const { error } = await supabaseClient
-      .from("profiles")
-      .upsert(payload, { onConflict: "id" });
-  
-    if (error) {
+
+    try {
+      await saveProfile(supabaseClient, payload);
+    } catch {
       setSaveError("We couldn’t save your profile.");
       return;
     }

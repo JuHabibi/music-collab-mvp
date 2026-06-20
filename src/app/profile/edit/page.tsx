@@ -1,4 +1,5 @@
 import { OnboardingScreen } from "@/features/onboarding/components/OnboardingScreen";
+import { getOwnProfile } from "@/features/profiles/profileRepository";
 import { supabaseServer } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -10,14 +11,7 @@ export default async function EditProfilePage() {
     if (!user) {
       redirect("/login");
     }
-    const { error, data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
-    if (error) {
-        throw error;
-    }
+    const profile = await getOwnProfile(supabase, user.id);
     if (!profile) {
         redirect("/onboarding");
     }

@@ -5,6 +5,7 @@ import { Badge, Button, Card, Container } from "@/components/ui";
 import { Footer } from "@/components/Footer";
 import { ServerHeader } from "@/components/ServerHeader";
 import { AmbientBackground } from "@/features/home/components/Background";
+import { getPublishedProfileById } from "@/features/profiles/profileRepository";
 import { supabaseServer } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -37,31 +38,7 @@ export default async function ArtistProfilePage({ params }: { params: Promise<{ 
   } = await supabase.auth.getUser();
 
 
-  const { data: profile, error } = await supabase
-    .from("profiles")
-    .select(
-      `
-      id,
-      display_name,
-      primary_role,
-      genres,
-      looking_for,
-      availability,
-      collaboration_mode,
-      city,
-      bio,
-      influences,
-      portfolio_links,
-      publish_status
-    `,
-    )
-    .eq("id", id)
-    .eq("publish_status", "published")
-    .maybeSingle();
-
-  if (error) {
-    throw error;
-  }
+  const profile = await getPublishedProfileById(supabase, id);
 
   if (!profile) {
     return <div className="p-8 text-white/60">Profile not found.</div>;
