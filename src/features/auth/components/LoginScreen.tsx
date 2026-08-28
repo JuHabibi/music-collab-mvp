@@ -72,7 +72,7 @@ export function LoginScreen() {
   
     setAuthSuccess("Welcome back.");
   
-    router.push(profile?.publish_status === "published" ? "/artist/me" : "/onboarding");
+    router.push(profile?.publish_status === "published" ? `/artist/${profile.id}` : "/onboarding");
     router.refresh();
   };
 

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 import { Badge, Button, Card, Container } from "@/components/ui";
 import { Footer } from "@/components/Footer";
 import { ServerHeader } from "@/components/ServerHeader";
+import { InviteToCollaborate } from "@/features/collaboration-requests/components/InviteToCollaborate";
 import { AmbientBackground } from "@/features/home/components/Background";
 import { getPublishedProfileById } from "@/features/profiles/profileRepository";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -99,14 +99,11 @@ export default async function ArtistProfilePage({ params }: { params: Promise<{ 
                 </p>
               ) : null}
 
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                <Button href="#" className="sm:w-auto">
-                  Message
-                </Button>
-                <Button href="#" variant="secondary" className="sm:w-auto">
-                  Invite to collaborate
-                </Button>
-              </div>
+              {!isOwner ? (
+                <div className="mt-7">
+                  <InviteToCollaborate receiverId={profile.id} />
+                </div>
+              ) : null}
             </div>
           </div>
         </Container>

@@ -327,9 +327,7 @@ export function OnboardingScreen({
       collaboration_mode: data.collaborationMode,
       publish_status: intent,
     };
-    console.log("influences form", data.influences);
-    console.log("payload influences", payload.influences);
-
+  
     try {
       await saveProfile(supabaseClient, payload);
     } catch {

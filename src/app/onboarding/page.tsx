@@ -22,8 +22,8 @@ export default async function OnboardingPage() {
   const profile = await getOwnProfile(supabase, user.id);
 
   if (profile?.publish_status === "published") {
-    const slug = profile.display_name.trim().toLowerCase().replace(/\s+/g, "-");
-    redirect(`/artist/${slug}`);
+
+    redirect(`/artist/${profile.id}`);
   }
   return <OnboardingScreen initialProfile={profile} initialIsAuthed={true} mode="onboarding" />;
 }

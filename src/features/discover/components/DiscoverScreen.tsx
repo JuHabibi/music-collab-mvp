@@ -5,12 +5,12 @@ import { Footer } from "@/components/Footer";
 import { Container } from "@/components/ui";
 import { AmbientBackground } from "@/features/home/components/Background";
 
+import { Header } from "@/components/Header";
+import type { Profile } from "@/features/profiles/types";
+import { useState } from "react";
 import { ArtistCard } from "./ArtistCard";
 import { DiscoverFilters } from "./DiscoverFilters";
 import { DiscoverHero } from "./DiscoverHero";
-import type { Profile } from "@/features/profiles/types";
-import { useState } from "react";
-import { Header } from "@/components/Header";
 
 export function DiscoverScreen({ profiles }: { profiles: Profile[] }) {
   const roleOptions = Array.from(
@@ -19,7 +19,7 @@ export function DiscoverScreen({ profiles }: { profiles: Profile[] }) {
   const [search, setSearch] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("");
- 
+
   const genreOptions = Array.from(
     new Set(profiles.flatMap((profile) => profile.genres).filter(Boolean)),
   ).sort();
@@ -28,7 +28,7 @@ export function DiscoverScreen({ profiles }: { profiles: Profile[] }) {
 
   const filteredProfiles = profiles.filter((profile) => {
     const query = normalize(search);
-  
+
     const searchableText = [
       profile.display_name,
       profile.primary_role,
@@ -41,23 +41,20 @@ export function DiscoverScreen({ profiles }: { profiles: Profile[] }) {
       .join(" ");
 
     const matchesSearch = !query || searchableText.includes(query);
-  
+
     const matchesRole =
       !selectedRole ||
       normalize(profile.primary_role) === normalize(selectedRole);
-  
+
     const matchesGenre =
       !selectedGenre ||
       profile.genres.some(
-        (genre) => normalize(genre) === normalize(selectedGenre)
+        (genre) => normalize(genre) === normalize(selectedGenre),
       );
     return matchesSearch && matchesRole && matchesGenre;
   });
   const hasActiveFilters =
-  search !== "" ||
-  selectedRole !== "" ||
-  selectedGenre !== "";
-
+    search !== "" || selectedRole !== "" || selectedGenre !== "";
 
   const summary = `${filteredProfiles.length} profiles found`;
 
