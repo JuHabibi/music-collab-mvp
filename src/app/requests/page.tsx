@@ -8,6 +8,7 @@ import {
   getReceivedCollaborationRequests,
   getSentCollaborationRequests,
 } from "@/features/collaboration-requests/collaborationRequestRepository";
+import { CollaborationRequestActions } from "@/features/collaboration-requests/components/CollaborationRequestActions";
 import type {
   CollaborationRequestProfileSummary,
   CollaborationRequestStatus,
@@ -79,11 +80,13 @@ function RequestCard({
   message,
   status,
   createdAt,
+  actions,
 }: {
   profile: CollaborationRequestProfileSummary | null;
   message: string;
   status: CollaborationRequestStatus;
   createdAt: string;
+  actions?: React.ReactNode;
 }) {
   return (
     <Card className="p-5">
@@ -99,6 +102,8 @@ function RequestCard({
       <p className="mt-4 text-xs text-white/45">
         {formatCreatedAt(createdAt)}
       </p>
+
+      {actions}
     </Card>
   );
 }
@@ -133,7 +138,7 @@ export default async function RequestsPage() {
               Collaboration requests
             </h1>
             <p className="mt-3 text-sm text-white/65 sm:text-[15px]">
-              Requests you have received and sent — read-only for now.
+              Requests you have received and sent.
             </p>
           </div>
 
@@ -155,6 +160,14 @@ export default async function RequestsPage() {
                       message={request.message}
                       status={request.status as CollaborationRequestStatus}
                       createdAt={request.created_at}
+                      actions={
+                        request.status === "pending" ? (
+                          <CollaborationRequestActions
+                            requestId={request.id}
+                            variant="received"
+                          />
+                        ) : null
+                      }
                     />
                   ))}
                 </div>
@@ -178,6 +191,14 @@ export default async function RequestsPage() {
                       message={request.message}
                       status={request.status as CollaborationRequestStatus}
                       createdAt={request.created_at}
+                      actions={
+                        request.status === "pending" ? (
+                          <CollaborationRequestActions
+                            requestId={request.id}
+                            variant="sent"
+                          />
+                        ) : null
+                      }
                     />
                   ))}
                 </div>
