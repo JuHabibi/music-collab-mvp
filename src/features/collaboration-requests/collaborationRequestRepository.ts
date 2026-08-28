@@ -70,6 +70,23 @@ export async function getSentCollaborationRequests(
   return data ?? [];
 }
 
+export async function getPendingReceivedCollaborationRequestCount(
+  supabase: CollaborationRequestsClient,
+  userId: string,
+): Promise<number> {
+  const { count, error } = await supabase
+    .from("collaboration_requests")
+    .select("*", { count: "exact", head: true })
+    .eq("receiver_id", userId)
+    .eq("status", "pending");
+
+  if (error) {
+    throw error;
+  }
+
+  return count ?? 0;
+}
+
 export async function updateCollaborationRequestStatus(
   supabase: CollaborationRequestsClient,
   requestId: string,

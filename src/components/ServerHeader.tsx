@@ -1,4 +1,5 @@
 import { HeaderClient } from "@/components/HeaderClient";
+import { getPendingReceivedCollaborationRequestCount } from "@/features/collaboration-requests/collaborationRequestRepository";
 import { supabaseServer } from "@/lib/supabase/server";
 
 export async function ServerHeader() {
@@ -7,6 +8,15 @@ export async function ServerHeader() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return <HeaderClient initialIsAuthed={Boolean(user)} />;
+  const pendingRequestsCount = user
+    ? await getPendingReceivedCollaborationRequestCount(supabase, user.id)
+    : 0;
+
+  return (
+    <HeaderClient
+      initialIsAuthed={Boolean(user)}
+      pendingRequestsCount={pendingRequestsCount}
+    />
+  );
 }
 

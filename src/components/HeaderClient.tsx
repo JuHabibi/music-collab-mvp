@@ -5,11 +5,21 @@ import { supabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-type HeaderClientProps = {
-  initialIsAuthed: boolean;
+type NavLink = {
+  label: string;
+  href: string;
+  badge?: number;
 };
 
-export function HeaderClient({ initialIsAuthed }: HeaderClientProps) {
+type HeaderClientProps = {
+  initialIsAuthed: boolean;
+  pendingRequestsCount?: number;
+};
+
+export function HeaderClient({
+  initialIsAuthed,
+  pendingRequestsCount = 0,
+}: HeaderClientProps) {
   const router = useRouter();
 
   const [loadingAuth, setLoadingAuth] = useState(false);
@@ -27,14 +37,24 @@ export function HeaderClient({ initialIsAuthed }: HeaderClientProps) {
   }, []);
 
   const navLinks = useMemo(() => {
-    const base = [
+    const base: NavLink[] = [
       { label: "Discover", href: "/discover" },
       { label: "How it works", href: "/#how" },
       { label: "Collaborate", href: "/#collaborate" },
     ];
-    if (isAuthed) return [...base, { label: "Onboarding", href: "/onboarding" }];
+    if (isAuthed) {
+      return [
+        ...base,
+        {
+          label: "Requests",
+          href: "/requests",
+          badge: pendingRequestsCount > 0 ? pendingRequestsCount : undefined,
+        },
+        { label: "Onboarding", href: "/onboarding" },
+      ];
+    }
     return [...base, { label: "Sign in", href: "/login" }];
-  }, [isAuthed]);
+  }, [isAuthed, pendingRequestsCount]);
 
   async function onSignOut() {
     setLoadingAuth(true);
@@ -61,9 +81,14 @@ export function HeaderClient({ initialIsAuthed }: HeaderClientProps) {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm text-white/70 transition hover:text-white"
+                className="inline-flex items-center gap-1.5 text-sm text-white/70 transition hover:text-white"
               >
                 {l.label}
+                {l.badge ? (
+                  <span className="inline-flex min-w-5 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] px-1.5 py-0.5 text-[11px] font-medium leading-none text-white/80">
+                    {l.badge}
+                  </span>
+                ) : null}
               </a>
             ))}
           </nav>
